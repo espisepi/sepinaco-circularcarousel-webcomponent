@@ -7,14 +7,14 @@ import { Image, Environment, ScrollControls, useScroll, useTexture } from '@reac
 import { easing } from 'maath'
 import './util'
 
-export const App = () => (
+export const App = ({ items, radius, radiusBanner, imageBanner }) => (
   <Canvas camera={{ position: [0, 0, 100], fov: 15 }}>
     <fog attach="fog" args={['#a79', 8.5, 12]} />
     <ScrollControls pages={4} infinite>
       <Rig rotation={[0, 0, 0.15]}>
-        <Carousel />
+        <Carousel items={items} radius={radius} />
       </Rig>
-      <Banner position={[0, -0.15, 0]} />
+      <Banner imageBanner={imageBanner} position={[0, -0.15, 0]} scale={[radiusBanner,radiusBanner,radiusBanner]} />
     </ScrollControls>
     <Environment preset="dawn" background blur={0.5} />
   </Canvas>
@@ -32,18 +32,20 @@ function Rig(props) {
   return <group ref={ref} {...props} />
 }
 
-function Carousel({ radius = 1.4, count = 8 }) {
+function Carousel({ items, radius = 1.6 }) {
+  const count = items.length;
   return Array.from({ length: count }, (_, i) => (
     <Card
       key={i}
-      url={`/img${Math.floor(i % 10) + 1}_.jpg`}
+      item={items[i]}
+      url={items[i].url}
       position={[Math.sin((i / count) * Math.PI * 2) * radius, 0, Math.cos((i / count) * Math.PI * 2) * radius]}
       rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
     />
   ))
 }
 
-function Card({ url, ...props }) {
+function Card({ item, url, ...props }) {
   const ref = useRef()
   const [hovered, hover] = useState(false)
   const pointerOver = (e) => (e.stopPropagation(), hover(true))
@@ -53,16 +55,22 @@ function Card({ url, ...props }) {
     easing.damp(ref.current.material, 'radius', hovered ? 0.25 : 0.1, 0.2, delta)
     easing.damp(ref.current.material, 'zoom', hovered ? 1 : 1.5, 0.2, delta)
   })
+  const handleClickPdp = () => {
+    // Especifica la URL a la que quieres redirigir
+    // window.location.href = urlpdp;
+    // Para abrirlo en segunda ventana descomentar el codigo de abajo
+    window.open(item.urlpdp, '_blank');
+  };
   return (
-    <Image ref={ref} url={url} transparent side={THREE.DoubleSide} onPointerOver={pointerOver} onPointerOut={pointerOut} {...props}>
+    <Image onClick={handleClickPdp} ref={ref} url={url} transparent side={THREE.DoubleSide} onPointerOver={pointerOver} onPointerOut={pointerOut} {...props}>
       <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
     </Image>
   )
 }
 
-function Banner(props) {
+function Banner({imageBanner, ...props}) {
   const ref = useRef()
-  const texture = useTexture('/work_.png')
+  const texture = useTexture(imageBanner)
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping
   const scroll = useScroll()
   useFrame((state, delta) => {
