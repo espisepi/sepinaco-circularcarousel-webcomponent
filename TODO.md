@@ -1,0 +1,3 @@
+- Poner fondo acuatico julipichan posidonia y productos de posidonia con sus respectivos enlaces
+
+- desplegar la app sepinaco-webcomponents con este componente web y crear un script que reemplace la pagina de julipichan original con mis componentes (ejecutar ese script en consola de chrome). Y despues ese sera el script que utilizare en el template del proyecto de posidonia original. https://posidoniastudio.bigcartel.com/

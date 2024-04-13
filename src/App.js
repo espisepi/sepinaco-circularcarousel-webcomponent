@@ -79,7 +79,7 @@ function Banner({imageBanner, ...props}) {
   })
   return (
     <mesh ref={ref} {...props}>
-      <cylinderGeometry args={[1.6, 1.6, 0.14, 128, 16, true]} />
+      <cylinderGeometry args={[2.6, 2.6, 0.14, 128, 16, true]} />
       <meshSineMaterial map={texture} map-anisotropy={16} map-repeat={[30, 1]} side={THREE.DoubleSide} toneMapped={false} />
     </mesh>
   )
